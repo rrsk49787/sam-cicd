@@ -5,6 +5,4 @@ def lambda_handler(event, context):
        "body": json.dumps({
            "message": "Hello from SAM CI/CD pipeline!",
        }),
-      for i in range (10):
-        print(i)
    }
