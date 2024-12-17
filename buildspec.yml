@@ -13,7 +13,7 @@ phases:
      - echo "Building SAM application"
      - sam build
      - echo "Packaging SAM application"
-     - sam package --s3-bucket sam-cicd-artifacts-bucket --output-template-file packaged.yaml
+     - sam package --s3-bucket sam-cicd-artifacts-buckets --output-template-file packaged.yaml
 artifacts:
  files:
    - packaged.yaml
