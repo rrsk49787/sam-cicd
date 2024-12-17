@@ -1,20 +1,30 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: AWS SAM CI/CD Example Application
 Resources:
- HelloWorldFunction:
+ MyLambdaFunction:
    Type: AWS::Serverless::Function
    Properties:
-     CodeUri: hello-world/
-     Handler: app.lambda_handler
-     Runtime: python3.9
-     Events:
-       ApiGateway:
-         Type: Api
-         Properties:
-           Path: /hello
-           Method: GET
-Outputs:
- ApiUrl:
-   Description: "API Gateway endpoint URL"
-   Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello"
+     Handler: src/app.lambda_handler  # Update to point to the correct handler in your code
+     Runtime: python3.8  # Change if you use a different runtime
+     MemorySize: 128
+     Timeout: 3
+     Environment:
+       Variables:
+         PARAM1: "value1"  # Add any necessary environment variables
+     CodeUri: src/
+ MyApi:
+   Type: AWS::Serverless::Api
+   Properties:
+     Name: MyApi
+     StageName: prod
+     DefinitionBody:
+       swagger: "2.0"
+       paths:
+         /myendpoint:
+           get:
+             operationId: getMethod
+             responses:
+               "200":
+                 description: "Successful Response"
+                 schema:
+                   type: string
