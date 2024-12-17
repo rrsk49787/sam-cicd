@@ -2,23 +2,18 @@ version: 0.2
 phases:
  install:
    runtime-versions:
-     python: 3.8  # Change this to your Lambda runtime version if needed
+     python: 3.9
    commands:
-     # Install the AWS SAM CLI
-     - echo Installing SAM CLI...
-     - curl -Lo sam-installation-script.sh https://github.com/aws/aws-sam-cli/releases/download/v1.70.0/install.sh
-     - chmod +x sam-installation-script.sh
-     - ./sam-installation-script.sh
+     - pip install --upgrade aws-sam-cli
+ pre_build:
+   commands:
+     - echo "Starting build process"
  build:
    commands:
-     # Build the SAM application
-     - echo Building the SAM application...
+     - echo "Building SAM application"
      - sam build
- post_build:
-   commands:
-     # Deploy the SAM application
-     - echo Deploying the SAM application...
-     - sam deploy --no-confirm-changeset --capabilities CAPABILITY_IAM --stack-name my-sam-stack --region $AWS_REGION
+     - echo "Packaging SAM application"
+     - sam package --s3-bucket sam-cicd-artifacts-bucket --output-template-file packaged.yaml
 artifacts:
  files:
-   - template.yaml  # Make sure to output the template.yaml as an artifact for the deploy phase
+   - packaged.yaml
